@@ -1,0 +1,43 @@
+batch_size: 4
+iters: 1000
+
+train_dataset:
+  type: Dataset
+  dataset_root: data/brain_mri_seg
+  train_path: data/brain_mri_seg/train.txt
+  num_classes: 2  # Number of pixel categories
+  transforms:
+    - type: RandomHorizontalFlip
+    - type: Normalize
+  mode: train
+
+val_dataset:
+  type: Dataset
+  dataset_root: data/brain_mri_seg
+  val_path: data/brain_mri_seg/val.txt
+  num_classes: 2
+  transforms:
+    - type: Normalize
+  mode: val
+
+optimizer:
+  type: sgd   # Using SGD (Stochastic Gradient Descent) method as the optimizer
+  momentum: 0.9
+  weight_decay: 4.0e-5  # Weight attenuation, the purpose of use is to prevent overfitting
+
+lr_scheduler: # Related settings for learning rate
+  type: PolynomialDecay   # A type of learning rate,a total of 12 strategies are supported
+  learning_rate: 0.01
+  end_lr: 0
+  power: 0.9
+
+loss: # Set the type of loss function
+  types:
+    - type: DiceLoss
+  coef: [ 1 ]
+
+model:
+  type: UNet
+  num_classes: 2
+  use_deconv: False
+  pretrained: Null
